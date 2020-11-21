@@ -1,0 +1,59 @@
+def shrink_left(S,index1,index2):
+    
+    while S[index1] in S[index1+1:index2]:
+ 
+        index1 += 1
+    
+    return index1,index2
+    
+def expand_right(S,index1,index2):
+    
+    test = 1
+    while index2 < len(S) and test:
+        if S[index2] == S[index1]:
+            index2 += 1
+            test = 0
+        else:
+            index2 += 1
+        
+    return index1,index2
+ 
+ 
+def SmallestSubString (S):
+    # Write your code here
+    distinct = []
+    for c in S:
+        if c not in distinct:
+            distinct.append(c)
+            
+    initial_test = distinct[:]
+    
+    index1 = 0
+    index2 = 0
+    while len(initial_test):
+        if S[index2] in initial_test:
+            initial_test.remove(S[index2])
+        index2 += 1
+        
+    index1, index2 = shrink_left(S,index1,index2)
+    
+        
+    minim = len(S[index1:index2])
+ 
+ 
+    while len(S[index1:index2]) > len(distinct) and index2<len(S):
+        
+        
+        index1,index2 = expand_right(S,index1,index2)
+        index1,index2 = shrink_left(S,index1,index2)
+        
+        if len(S[index1:index2]) < minim:
+            minim = len(S[index1:index2])
+        
+    return minim
+ 
+S = raw_input()
+ 
+ 
+out_ = SmallestSubString(S)
+print out_
